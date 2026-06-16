@@ -481,7 +481,7 @@ def main(page: ft.Page):
                         ),
                     ],
                 ),
-                # VIDEO SECTION - Embedded Video Player (Fixed - using padding instead of margin)
+                # VIDEO SECTION - Embedded Video Player
                 ft.Container(
                     padding=ft.Padding(0, 30, 0, 0),  # top=30, left=0, right=0, bottom=0
                     content=ft.Column(
@@ -926,12 +926,13 @@ if __name__ == "__main__":
         # Start the browser opener in a separate thread
         threading.Thread(target=open_browser, daemon=True).start()
         
-        # Run the Flet app with web support
+        # Run the Flet app with web support - FIXED for Render deployment
+        port = int(os.environ.get("PORT", 8551))
         ft.app(
             target=main,
-            host="127.0.0.1",
-            port=8551,
-            view=ft.AppView.WEB_BROWSER,  # This will open in default browser
+            host="0.0.0.0",  # Changed from 127.0.0.1 to 0.0.0.0 for Render
+            port=port,
+            view=ft.AppView.WEB_BROWSER,
             assets_dir="assets",
         )
     except Exception as e:
