@@ -424,7 +424,7 @@ def main(page: ft.Page):
         ),
     )
 
-    # 6. Technical Blog Section - WITH VIDEO (Fixed)
+    # 6. Technical Blog Section - WITH VIDEO
     blog_section = ft.Container(
         key="blog",
         bgcolor=LIGHT_BG,
@@ -915,25 +915,18 @@ def main(page: ft.Page):
         )
     )
 
-def open_browser():
-    """Open the web browser automatically when the server starts"""
-    import time
-    time.sleep(2)  # Give the server a moment to start
-    webbrowser.open("http://127.0.0.1:8551")
-
 if __name__ == "__main__":
     try:
-        # Start the browser opener in a separate thread
-        threading.Thread(target=open_browser, daemon=True).start()
-        
-        # Run the Flet app with web support - FIXED for Render deployment
+        # Get port from environment variable for Render
         port = int(os.environ.get("PORT", 8551))
+        
+        # Run the Flet app - CRITICAL: Use view=None or omit view for headless servers
         ft.app(
             target=main,
-            host="0.0.0.0",  # Changed from 127.0.0.1 to 0.0.0.0 for Render
+            host="0.0.0.0",  # Bind to all interfaces for Render
             port=port,
-            view=ft.AppView.WEB_BROWSER,
             assets_dir="assets",
+            # Do NOT use view=ft.AppView.WEB_BROWSER on Render - it tries to open a browser window
         )
     except Exception as e:
         print(f"Error: {e}", flush=True)
